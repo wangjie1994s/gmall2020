@@ -1,12 +1,12 @@
 package com.aisino.gmall.user.service.impl;
 
-import com.aisino.gmall.service.UserService;
 import com.aisino.gmall.bean.UmsMember;
 import com.aisino.gmall.bean.UmsMemberReceiveAddress;
+import com.aisino.gmall.service.UserService;
 import com.aisino.gmall.user.mapper.UmsMemberReceiveAddressMapper;
 import com.aisino.gmall.user.mapper.UserMapper;
+import com.alibaba.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.aisino.gmall.user.bean;
+package com.aisino.gmall.bean;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

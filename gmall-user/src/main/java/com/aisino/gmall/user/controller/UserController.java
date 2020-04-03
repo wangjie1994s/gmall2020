@@ -1,11 +1,10 @@
 package com.aisino.gmall.user.controller;
 
-import com.aisino.gmall.user.bean.UmsMember;
-import com.aisino.gmall.user.bean.UmsMemberReceiveAddress;
-import com.aisino.gmall.user.service.UserService;
+import com.aisino.gmall.service.UserService;
+import com.aisino.gmall.bean.UmsMember;
+import com.aisino.gmall.bean.UmsMemberReceiveAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 

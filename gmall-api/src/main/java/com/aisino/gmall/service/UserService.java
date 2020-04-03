@@ -1,7 +1,7 @@
-package com.aisino.gmall.user.service;
+package com.aisino.gmall.service;
 
-import com.aisino.gmall.user.bean.UmsMember;
-import com.aisino.gmall.user.bean.UmsMemberReceiveAddress;
+import com.aisino.gmall.bean.UmsMember;
+import com.aisino.gmall.bean.UmsMemberReceiveAddress;
 
 import java.util.List;
 
