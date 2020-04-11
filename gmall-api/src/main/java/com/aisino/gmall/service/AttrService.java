@@ -2,6 +2,7 @@ package com.aisino.gmall.service;
 
 import com.aisino.gmall.bean.PmsBaseAttrInfo;
 import com.aisino.gmall.bean.PmsBaseAttrValue;
+import com.aisino.gmall.bean.PmsBaseSaleAttr;
 
 import java.util.List;
 
@@ -11,8 +12,8 @@ public interface AttrService {
 
     List<PmsBaseAttrValue> getAttrValueList(String attrId);
 
-    /**
-    Boolean saveAttrInfo(PmsBaseAttrInfo pmsBaseAttrInfo);
-     **/
+    String saveAttrInfo(PmsBaseAttrInfo pmsBaseAttrInfo);
+
+    List<PmsBaseSaleAttr> baseSaleAttrList();
 
 }
