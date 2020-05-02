@@ -6,4 +6,6 @@ import com.aisino.gmall.bean.PmsSkuInfo;
 public interface SkuService {
 
     void saveSkuInfo(PmsSkuInfo pmsSkuInfo);
+
+    PmsSkuInfo getSkuById(String skuId);
 }
