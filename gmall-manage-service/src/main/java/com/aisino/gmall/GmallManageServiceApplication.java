@@ -1,4 +1,4 @@
-package com.aisino.gmall.manage;
+package com.aisino.gmall;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
