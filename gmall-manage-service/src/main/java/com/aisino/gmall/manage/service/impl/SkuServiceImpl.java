@@ -15,8 +15,11 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.Jedis;
+import tk.mybatis.mapper.util.StringUtil;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class SkuServiceImpl implements SkuService{
@@ -67,7 +70,8 @@ public class SkuServiceImpl implements SkuService{
             //缓存没有查询数据库
 
             //设置分布式锁，解决缓存击穿问题
-            String OK = jedis.set("sku:" + skuId + ":lock", "1", "nx", "px", 10);
+            String token = UUID.randomUUID().toString();
+            String OK = jedis.set("sku:" + skuId + ":lock", token, "nx", "px", 10*1000);//需设置分布式锁的超时时间，防止其他线程拿不到分布式锁
             //设置成功，有权在10秒的过期时间内访问数据库
             if(StringUtils.isNotEmpty(OK) && "OK".equals(OK)){
 
@@ -81,6 +85,17 @@ public class SkuServiceImpl implements SkuService{
                     //数据库中不存在该sku
                     //为了防止缓存穿透，将null值或者空字符串值设置给redis
                     jedis.setex(skuKey,60*3 , JSON.toJSONString(""));
+                }
+
+                //删除锁之前先get到lockToken
+                String lockToken = jedis.get("sku:" + skuId + ":lock");
+                //用token确认的是删除的自己的锁
+                if(StringUtil.isNotEmpty(lockToken) && lockToken.equals(token)){
+                    //可以用lua脚本，在查询到key的同时删除该key，防止高并发下的意外的发生
+                    String script ="if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
+                    jedis.eval(script, Collections.singletonList("lock"),Collections.singletonList(token));
+                    //在访问完数据库之后，需要释放redis分布式锁
+                    jedis.del("sku:" + skuId + ":lock");
                 }
             } else {
 

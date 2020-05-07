@@ -18,3 +18,6 @@ nginx                                    nginx服务期端口      :8099
 
 #gmall-item-servier                       前台系统的商品详情服务（实际可以调用gmall-manage-service实现）
 gmall-item-web                           前台系统的商品详情展示 :8083
+
+gmall-redisson-test                       redisson测试       :8180
+elasticSearch                             es非关系型数据库     :9200

@@ -1,10 +1,10 @@
-package com.aisino.gmall.user;
+package com.aisino.gmall.gmallredissontest;
 
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class GmallUserApplicationTests {
+class GmallRedissonTestApplicationTests {
 
 	@Test
 	void contextLoads() {
