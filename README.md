@@ -21,3 +21,4 @@ gmall-item-web                           前台系统的商品详情展示 :8083
 
 gmall-redisson-test                       redisson测试       :8180
 elasticSearch                             es非关系型数据库     :9200
+kibana       用来搜索、查看交互存储在Elasticsearch索引中的数据    :5601
