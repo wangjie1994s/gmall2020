@@ -22,3 +22,6 @@ gmall-item-web                           前台系统的商品详情展示 :8083
 gmall-redisson-test                       redisson测试       :8180
 elasticSearch                             es非关系型数据库     :9200
 kibana       用来搜索、查看交互存储在Elasticsearch索引中的数据    :5601
+
+gmall-search-service                     搜素服务的service层   :8072
+gmall-search-web                         搜索服务的web层       :8084

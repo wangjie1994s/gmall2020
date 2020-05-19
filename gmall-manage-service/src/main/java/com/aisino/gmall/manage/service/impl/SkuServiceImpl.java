@@ -122,6 +122,26 @@ public class SkuServiceImpl implements SkuService{
         return pmsSkuInfos;
     }
 
+    @Override
+    public List<PmsSkuInfo> getAllSku(String catalog3Id) {
+
+        List<PmsSkuInfo> pmsSkuInfos = pmsSkuInfoMapper.selectAll();
+
+        for (PmsSkuInfo pmsSkuInfo : pmsSkuInfos) {
+
+            String skuId = pmsSkuInfo.getId();
+
+            PmsSkuAttrValue pmsSkuAttrValue = new PmsSkuAttrValue();
+            pmsSkuAttrValue.setSkuId(skuId);
+            List<PmsSkuAttrValue> select = pmsSkuAttrValueMapper.select(pmsSkuAttrValue);
+
+            pmsSkuInfo.setSkuAttrValueList(select);
+
+        }
+
+        return pmsSkuInfos;
+    }
+
 
     @Override
     public void saveSkuInfo(PmsSkuInfo pmsSkuInfo) {
