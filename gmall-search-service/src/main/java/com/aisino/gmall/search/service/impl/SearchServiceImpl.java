@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class SearchServiceImpl implements SearchService {
@@ -32,6 +33,7 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public List<PmsSearchSkuInfo> list(PmsSearchParam pmsSearchParam) {
 
+        //调用getSearchDsl方法
         String dslString = getSearchDsl(pmsSearchParam);
 
         System.out.println(dslString);
@@ -54,6 +56,12 @@ public class SearchServiceImpl implements SearchService {
 
             PmsSearchSkuInfo source = hit.source;
 
+            Map<String,List<String>> highlight = hit.highlight;
+            if(highlight != null){
+
+                String skuName = highlight.get("skuName").get(0);
+                source.setSkuName(skuName);
+            }
             pmsSearchSkuInfos.add(source);
 
         }
@@ -67,7 +75,7 @@ public class SearchServiceImpl implements SearchService {
 
     private String getSearchDsl(PmsSearchParam pmsSearchParam){
 
-        List<PmsSkuAttrValue> pmsSkuAttrValueList = pmsSearchParam.getSkuAttrValueList();
+        String[] skuAttrValueList = pmsSearchParam.getValueId();
         String keyword = pmsSearchParam.getKeyword();
         String catalog3Id = pmsSearchParam.getCatalog3Id();
 
@@ -84,10 +92,10 @@ public class SearchServiceImpl implements SearchService {
 
         }
         //保证pmsSkuAttrValueList不为空时才做循环
-        if (pmsSkuAttrValueList != null){
+        if (skuAttrValueList != null){
 
-            for (PmsSkuAttrValue pmsSkuAttrValue : pmsSkuAttrValueList) {
-                TermQueryBuilder termQueryBuilder = new TermQueryBuilder("skuAttrValueList.valueId", pmsSkuAttrValue.getValueId());
+            for (String pmsSkuAttrValue : skuAttrValueList) {
+                TermQueryBuilder termQueryBuilder = new TermQueryBuilder("skuAttrValueList.valueId", pmsSkuAttrValue);
                 boolQueryBuilder.filter(termQueryBuilder);
                 //TermsQueryBuilder termsQueryBuilder = new TermsQueryBuilder("","");
             }
