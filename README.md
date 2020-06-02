@@ -25,3 +25,6 @@ kibana       用来搜索、查看交互存储在Elasticsearch索引中的数据
 
 gmall-search-service                     搜素服务的service层   :8072
 gmall-search-web                         搜索服务的web层       :8084
+
+gmall-cart-service                       购物车服务的service层 :8073
+gmall-cart-web                           购物车服务的web层     :8085
