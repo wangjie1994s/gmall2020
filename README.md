@@ -28,3 +28,6 @@ gmall-search-web                         搜索服务的web层       :8084
 
 gmall-cart-service                       购物车服务的service层 :8073
 gmall-cart-web                           购物车服务的web层     :8085
+
+gmall-passport-web                       用户认证中心web层     :8086
+#gmall-passport-service(gmall-user-service)

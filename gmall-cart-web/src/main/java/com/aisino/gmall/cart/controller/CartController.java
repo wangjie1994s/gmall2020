@@ -1,5 +1,6 @@
 package com.aisino.gmall.cart.controller;
 
+import com.aisino.gmall.annotations.LoginRequired;
 import com.aisino.gmall.bean.OmsCartItem;
 import com.aisino.gmall.bean.PmsSkuInfo;
 import com.aisino.gmall.service.CartService;
@@ -24,13 +25,25 @@ import java.util.List;
 public class CartController {
 
     @Reference
-    CartService cartService;
-
-    @Reference
     SkuService skuService;
 
+    @Reference
+    CartService cartService;
+
+
+    @RequestMapping("toTrade")
+    //必须登陆成功才能访问
+    @LoginRequired(loginSuccess = true)
+    public String toTrade(HttpServletRequest request, HttpServletResponse response, HttpSession session, ModelMap modelMap){
+
+        String memberId = (String)request.getAttribute("memberId");
+        String nickname = (String)request.getAttribute("nickname");
+
+        return "toTrade";
+    }
 
     @RequestMapping("checkCart")
+    @LoginRequired(loginSuccess = false)
     public String checkCart(String isChecked, String skuId, HttpServletRequest request, HttpServletResponse response, HttpSession session, ModelMap modelMap){
 
         String memberId = "1";
@@ -45,11 +58,18 @@ public class CartController {
         List<OmsCartItem> omsCartItems = cartService.cartList(memberId);
         modelMap.put("cartList", omsCartItems);
 
+        modelMap.put("cartList", omsCartItems);
+
+        //结算时被勾选商品的总价
+        BigDecimal totalAmount = getTotalAmount(omsCartItems);
+        modelMap.put("totalAmount", totalAmount);
+
         return "cartListInner";
 
     }
 
     @RequestMapping("cartList")
+    @LoginRequired(loginSuccess = false)
     public String cartList(HttpServletRequest request, HttpServletResponse response, HttpSession session, ModelMap modelMap){
 
         List<OmsCartItem> omsCartItems = new ArrayList<>();
@@ -76,11 +96,32 @@ public class CartController {
         
 
         modelMap.put("cartList", omsCartItems);
+
+        //结算时被勾选商品的总价
+        BigDecimal totalAmount = getTotalAmount(omsCartItems);
+        modelMap.put("totalAmount", totalAmount);
+
         return "cartList";
 
     }
 
+    private BigDecimal getTotalAmount(List<OmsCartItem> omsCartItems) {
+
+        BigDecimal totalAmount = new BigDecimal("0");
+
+        for (OmsCartItem omsCartItem : omsCartItems) {
+            BigDecimal totalPrice = omsCartItem.getTotalPrice();
+
+            if("1".equals(omsCartItem.getIsChecked())){
+                totalAmount = totalAmount.add(totalPrice);
+            }
+        }
+
+        return totalAmount;
+    }
+
     @RequestMapping("addToCart")
+    @LoginRequired(loginSuccess = false)
     public String addToCart(String skuId, int quantity, HttpServletRequest request, HttpServletResponse response, HttpSession session){
 
         //购物车集合对象
