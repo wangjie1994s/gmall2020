@@ -3,12 +3,15 @@ package com.aisino.gmall.interceptors;
 import com.aisino.gmall.annotations.LoginRequired;
 import com.aisino.gmall.util.CookieUtil;
 import com.aisino.gmall.util.HttpclientUtil;
+import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class AuthInterceptor extends HandlerInterceptorAdapter {
@@ -45,8 +48,18 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 
         //调用认证中心，验证token
         String success = "fail";
+        Map<String, String> successMap = new HashMap<>();
         if(StringUtils.isNotBlank(token)){
-            success = HttpclientUtil.doGet("http://127.0.0.1:8086/verify?token="+token);
+            String ip = request.getHeader("x-forwarded-for");
+            if (StringUtils.isBlank(ip)){
+                ip = request.getRemoteAddr();
+                if (StringUtils.isBlank(ip)){
+                    ip = "127.0.0.1";
+                }
+            }
+            String successJson = HttpclientUtil.doGet("http://127.0.0.1:8086/verify?token="+token+"&currentIp="+ip);
+            successMap = JSON.parseObject(successJson, Map.class);
+            success = successMap.get("status");
         }
 
         if(loginSuccess){
@@ -58,16 +71,16 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
                 return false;
             } else {
                 //需要将token携带的用户信息写入
-                request.setAttribute("memberId", "1");
-                request.setAttribute("nickname", "nickname");
+                request.setAttribute("memberId", successMap.get("memberId"));
+                request.setAttribute("nickname", successMap.get("nickname"));
                 return true;
             }
         } else {
             //可以不用登陆就可以访问,但是token必须验证
             if(success.equals("success")){
                 //需要将token携带的用户信息写入
-                request.setAttribute("memberId", "1");
-                request.setAttribute("nickname", "nickname");
+                request.setAttribute("memberId", successMap.get("memberId"));
+                request.setAttribute("nickname", successMap.get("nickname"));
             }
         }
         //验证通过，覆盖cookie中的token

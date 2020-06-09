@@ -1,5 +1,6 @@
 package com.aisino.gmall.search.controller;
 
+import com.aisino.gmall.annotations.LoginRequired;
 import com.aisino.gmall.bean.*;
 import com.aisino.gmall.service.AttrService;
 import com.aisino.gmall.service.SearchService;
@@ -153,6 +154,7 @@ public class SearchController {
     }
 
     @RequestMapping("index")
+    @LoginRequired(loginSuccess = false)
     public String index(){
 
         return "index";

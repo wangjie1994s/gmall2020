@@ -82,8 +82,12 @@
                 var password = $("#password").val();
 
                 $.post("login", {username:username,password:password}, function(token){
-                    //验证token是否为空或者异常
-					window.location.href=$("#ReturnUrl").val()+"?token="+token;
+                    if(token == "fail"){
+                        alert("用户名或密码不匹配，请重新登陆")
+					} else {
+                        //验证token是否为空或者异常
+                        window.location.href=$("#ReturnUrl").val()+"?token="+token;
+					}
 				});
 
 			}
