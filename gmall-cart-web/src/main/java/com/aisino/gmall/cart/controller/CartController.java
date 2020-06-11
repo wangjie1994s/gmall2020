@@ -31,22 +31,12 @@ public class CartController {
     CartService cartService;
 
 
-    @RequestMapping("toTrade")
-    //必须登陆成功才能访问
-    @LoginRequired(loginSuccess = true)
-    public String toTrade(HttpServletRequest request, HttpServletResponse response, HttpSession session, ModelMap modelMap){
-
-        String memberId = (String)request.getAttribute("memberId");
-        String nickname = (String)request.getAttribute("nickname");
-
-        return "toTrade";
-    }
-
     @RequestMapping("checkCart")
     @LoginRequired(loginSuccess = false)
     public String checkCart(String isChecked, String skuId, HttpServletRequest request, HttpServletResponse response, HttpSession session, ModelMap modelMap){
 
-        String memberId = (String)request.getAttribute("memberId");
+        //String memberId = (String)request.getAttribute("memberId");
+        String memberId = "1";
         String nickname = (String)request.getAttribute("nickname");
 
         //调用服务，修改状态
@@ -57,8 +47,6 @@ public class CartController {
         cartService.checkCart(omsCartItem);
         //将最新的数据从缓存中查出，渲染给内嵌页
         List<OmsCartItem> omsCartItems = cartService.cartList(memberId);
-        modelMap.put("cartList", omsCartItems);
-
         modelMap.put("cartList", omsCartItems);
 
         //结算时被勾选商品的总价
@@ -74,7 +62,8 @@ public class CartController {
     public String cartList(HttpServletRequest request, HttpServletResponse response, HttpSession session, ModelMap modelMap){
 
         List<OmsCartItem> omsCartItems = new ArrayList<>();
-        String memberId = (String)request.getAttribute("memberId");
+        //String memberId = (String)request.getAttribute("memberId");
+        String memberId = "1";
         String nickname = (String)request.getAttribute("nickname");
 
         //如果用户已经登陆，调用购物车服务查询db；如果用户未登陆，需要查询cookie
@@ -95,7 +84,7 @@ public class CartController {
             omsCartItem.setTotalPrice(omsCartItem.getPrice().multiply(omsCartItem.getQuantity()));
             
         }
-        
+
 
         modelMap.put("cartList", omsCartItems);
 
@@ -148,7 +137,8 @@ public class CartController {
         omsCartItem.setQuantity(new BigDecimal(quantity));
 
         //判断当前用户是否为登陆状态
-        String memberId = (String)request.getAttribute("memberId");
+        //String memberId = (String)request.getAttribute("memberId");
+        String memberId = "1";
         String nickname = (String)request.getAttribute("nickname");
 
         if(StringUtils.isBlank(memberId)){
