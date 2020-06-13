@@ -61,8 +61,8 @@
 			<div class="top-3">
 				<ul >
 				 <li class=".address default selected" th:each="userAddress:${userAddressList}"  >
-					 <input   name="deliveryAddress" type="radio"  value=""  th:checked="${userAddress.isDefault}=='1'">
-					<span  th:text="${userAddress.consignee}" >收件人AAAA </span><span th:text="${userAddress.userAddress}"   >具体地址111 </span>
+					 <input   name="deliveryAddress" type="radio"  th:value="${userAddress.id}"  th:checked="${userAddress.defaultStatus}=='1'" onclick="changeAddress()">
+					<span  th:text="${userAddress.name}" >收件人AAAA </span><span th:text="${userAddress.province}+${userAddress.city}+${userAddress.region}+${userAddress.detailAddress}"   >具体地址111 </span>
 				 </li>
 				</ul>
 			</div>
@@ -119,19 +119,20 @@
 		</div>
 
 		<form action="./submitOrder" method="post" id="orderForm">
-			<input name="consignee" id="consignee" type="hidden"/>
-			<input name="deliveryAddress" id="deliveryAddress" type="hidden"/>
-			<input name="paymentWay" id="paymentWay" type="hidden"/>
-			<input name="orderComment" id="orderComment" type="hidden"/>
-			<span  th:each="orderDetail,stat:${orderDetailList}" >
-				<input th:name="'orderDetailList['+${stat.index}+'].skuId'" type="hidden"    th:value="${orderDetail.skuId}" />
-				<input th:name="'orderDetailList['+${stat.index}+'].skuNum'" type="hidden"    th:value="${orderDetail.skuNum}" />
-				<input th:name="'orderDetailList['+${stat.index}+'].orderPrice'" type="hidden"    th:value="${orderDetail.orderPrice}" />
-				<input th:name="'orderDetailList['+${stat.index}+'].skuName'" type="hidden"    th:value="${orderDetail.skuName}" />
-			</span>
+			<input name="receiveAddressId" id="receiveAddressId" value="1" type="hidden"/>
+			<input name="totalAmount" id="totalAmount" type="hidden" th:value="${totalAmount}"/>
+
 			<input name="tradeCode" type="hidden"  th:value="${tradeCode}"  />
 		</form>
 		<script>
+
+            function changeAddress() {
+                var receiveAddressId = $("input[name='deliveryAddress']:checked").val();
+
+                $("#receiveAddressId").val(receiveAddressId);
+
+            }
+
             $(function() {
 
                 $("#submitButton").click(function () {

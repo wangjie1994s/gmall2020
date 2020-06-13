@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
 
             if(jedis != null){
                 //缓存不为空
-                String umsMemberStr = jedis.get("user:" + umsMember.getPassword() + ":info");
+                String umsMemberStr = jedis.get("user:" + umsMember.getPassword()+umsMember.getUsername() + ":info");
                 if(StringUtils.isNotBlank(umsMemberStr)){
                     //密码正确
                     UmsMember umsMemberFromCache = JSON.parseObject(umsMemberStr, UmsMember.class);
@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
                 UmsMember umsMemberFromDb = loginFromDb(umsMember);
                 if(umsMemberFromDb != null){
                     //设置过期时间为24小时
-                    jedis.setex("user:" + umsMember.getPassword() + ":info", 60*60*24, JSON.toJSONString(umsMemberFromDb));
+                    jedis.setex("user:" + umsMember.getPassword()+umsMember.getUsername() + ":info", 60*60*24, JSON.toJSONString(umsMemberFromDb));
                 }
                 return umsMemberFromDb;
             }
@@ -95,9 +95,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addOauthUser(UmsMember umsMember) {
-
+    public UmsMember addOauthUser(UmsMember umsMember) {
         userMapper.insertSelective(umsMember);
+        return umsMember;
     }
 
     @Override
@@ -105,6 +105,15 @@ public class UserServiceImpl implements UserService {
 
         UmsMember umsMember = userMapper.selectOne(umsCheck);
         return umsMember;
+    }
+
+    @Override
+    public UmsMemberReceiveAddress getReceiveAddressById(String receiveAddressId) {
+
+        UmsMemberReceiveAddress umsMemberReceiveAddress = new UmsMemberReceiveAddress();
+        umsMemberReceiveAddress.setId(receiveAddressId);
+        UmsMemberReceiveAddress umsMemberReceiveAddress1 = umsMemberReceiveAddressMapper.selectOne(umsMemberReceiveAddress);
+        return umsMemberReceiveAddress1;
     }
 
     private UmsMember loginFromDb(UmsMember umsMember) {

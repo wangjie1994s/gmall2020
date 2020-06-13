@@ -64,16 +64,19 @@ public class PassportController {
 
         UmsMember umsCheck = new UmsMember();
         umsCheck.setSourceUid(umsMember.getSourceUid());
+        //检查该社交用户以前是否登陆过系统
         UmsMember umsMemberCheck = userService.checkOauthUser(umsCheck);
 
         if(umsMemberCheck==null){
-            userService.addOauthUser(umsMember);
+            //保存用户信息
+            umsMember = userService.addOauthUser(umsMember);
         }else{
             umsMember = umsMemberCheck;
         }
 
         //生成jwt的token，并且重定向到首页，携带该token
         String token = null;
+        //rpc的主键返回策略失效
         String memberId = umsMember.getId();
         String nickname = umsMember.getNickname();
         Map<String,Object> userMap = new HashMap<>();

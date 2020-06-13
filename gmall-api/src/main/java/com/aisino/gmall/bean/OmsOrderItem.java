@@ -13,8 +13,8 @@ public class OmsOrderItem implements Serializable {
     private String productName;
     private String productBrand;
     private String productSn;
-    private String productPrice;
-    private int productQuantity;
+    private BigDecimal productPrice;
+    private BigDecimal productQuantity;
     private String productSkuId;
     private String productSkuCode;
     private String productCategoryId;
@@ -25,7 +25,7 @@ public class OmsOrderItem implements Serializable {
     private BigDecimal promotionAmount;
     private BigDecimal couponAmount;
     private BigDecimal integrationAmount;
-    private String realAmount;
+    private BigDecimal realAmount;
     private int giftIntegration;
     private int giftGrowth;
     private String productAttr;
@@ -95,20 +95,24 @@ public class OmsOrderItem implements Serializable {
         this.productSn = productSn;
     }
 
-    public String getProductPrice() {
+    public BigDecimal getProductPrice() {
         return productPrice;
     }
 
-    public void setProductPrice(String productPrice) {
+    public void setProductPrice(BigDecimal productPrice) {
         this.productPrice = productPrice;
     }
 
-    public int getProductQuantity() {
+    public BigDecimal getProductQuantity() {
         return productQuantity;
     }
 
-    public void setProductQuantity(int productQuantity) {
+    public void setProductQuantity(BigDecimal productQuantity) {
         this.productQuantity = productQuantity;
+    }
+
+    public void setRealAmount(BigDecimal realAmount) {
+        this.realAmount = realAmount;
     }
 
     public String getProductSkuId() {
@@ -189,14 +193,6 @@ public class OmsOrderItem implements Serializable {
 
     public void setIntegrationAmount(BigDecimal integrationAmount) {
         this.integrationAmount = integrationAmount;
-    }
-
-    public String getRealAmount() {
-        return realAmount;
-    }
-
-    public void setRealAmount(String realAmount) {
-        this.realAmount = realAmount;
     }
 
     public int getGiftIntegration() {
