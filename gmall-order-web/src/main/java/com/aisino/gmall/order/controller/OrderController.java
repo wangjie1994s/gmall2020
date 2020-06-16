@@ -44,17 +44,17 @@ public class OrderController {
     public String submitOrder(String receiveAddressId, BigDecimal totalAmount, String tradeCode, HttpServletRequest request, HttpServletResponse response, HttpSession session, ModelMap modelMap) {
 
 
-        //memberId = (String) request.getAttribute("memberId");
-        String memberId = "1";
-        //String nickname = (String) request.getAttribute("nickname");
-        String nickname = "windir";
+        String memberId = (String) request.getAttribute("memberId");
+        //String memberId = "1";
+        String nickname = (String) request.getAttribute("nickname");
+        //String nickname = "windir";
 
         //防止一个订单重复提交的解决方法：一个订单提交页只允许使用一个交易码，且每次提交订单后该交易码失效，下次得重新获取新的交易码
         //根据检查结果提交订单，如果检查通过，允许提交订单； 如果检查失败，不允许提交订单
         // 1.检查交易码
        //todo 请求submitOrder方法参数为空问题需要排查
-        //String success = orderService.checkTradeCode(memberId, tradeCode);
-       String success = "success";
+        String success = orderService.checkTradeCode(memberId, tradeCode);
+       //String success = "success";
 
         if (success.equals("success")) {
             List<OmsOrderItem> omsOrderItems = new ArrayList<>();
@@ -131,10 +131,10 @@ public class OrderController {
 
 
             // 5.重定向到支付系统
+            return "redirect:http://payment.gmall.com:8075/index";
         } else {
             return "tradeFail";
         }
-        return null;
     }
 
 
@@ -143,8 +143,8 @@ public class OrderController {
     @LoginRequired(loginSuccess = true)
     public String toTrade(HttpServletRequest request, HttpServletResponse response, HttpSession session, ModelMap modelMap){
 
-        //String memberId = (String)request.getAttribute("memberId");
-        String memberId = "1";
+        String memberId = (String)request.getAttribute("memberId");
+        //String memberId = "1";
         String nickname = (String)request.getAttribute("nickname");
 
         //通过memberId获得用户收货地址集合

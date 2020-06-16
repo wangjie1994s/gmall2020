@@ -39,13 +39,13 @@ public class OrderServiceImpl implements OrderService {
             //连接缓存
             jedis = redisUtil.getJedis();
             String tradeKey = "user:" + memberId + ":tradeCode";
-            String tradeCodeFromCache = jedis.get(tradeKey);
+            //String tradeCodeFromCache = jedis.get(tradeKey);
             //防止多线程并发下一key多用，解决方法：可以用lua脚本，在查询到key的同时删除该key，防止高并发下的意外的发生
             String script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
             Long eval = (Long) jedis.eval(script, Collections.singletonList(tradeKey), Collections.singletonList(tradeCode));
 
             if (eval!=null&&eval!=0) {
-                // jedis.del(tradeKey);
+                jedis.del(tradeKey);
                 return "success";
             } else {
                 return "fail";
@@ -91,5 +91,14 @@ public class OrderServiceImpl implements OrderService {
 
 
         }
+    }
+
+    @Override
+    public OmsOrder getOrderByOutTradeNo(String outTradeNo) {
+
+        OmsOrder omsOrder = new OmsOrder();
+        omsOrder.setOrderSn(outTradeNo);
+        omsOrder = omsOrderMapper.selectOne(omsOrder);
+        return omsOrder;
     }
 }

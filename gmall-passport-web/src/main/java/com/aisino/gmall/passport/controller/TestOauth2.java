@@ -13,7 +13,7 @@ public class TestOauth2 {
         // 1 获得授权码
         // App Key = 2355710819
         // 回调地址 = http://127.0.0.1:8086/vlogin
-        String s1 = HttpclientUtil.doGet("https://api.weibo.com/oauth2/authorize?client_id=2355710819&response_type=code&redirect_uri=http://127.0.0.1:8086/vlogin");
+        String s1 = HttpclientUtil.doGet("https://api.weibo.com/oauth2/authorize?client_id=2355710819&response_type=code&redirect_uri=http://passport.gmall.com:8086/vlogin");
         System.out.println(s1);
         // 在第一步和第二部返回回调地址之间,有一个用户操作授权的过程
         // 2 返回授权码到回调地址
@@ -28,7 +28,7 @@ public class TestOauth2 {
         paramMap.put("client_id","2355710819");
         paramMap.put("client_secret","26c702e47902a58d157d92d30767b878");
         paramMap.put("grant_type","authorization_code");
-        paramMap.put("redirect_uri","http://127.0.0.1:8086/vlogin");
+        paramMap.put("redirect_uri","http://passport.gmall.com:8086/vlogin");
         paramMap.put("code","06b904635d3e491bd3ce2fb114373d13");// 授权有效期内可以使用，没新生成一次授权码，说明用户对第三方数据进行重启授权，之前的access_token和授权码全部过期
         String access_token_json = HttpclientUtil.doPost(s3, paramMap);
         Map<String,String> access_map = JSON.parseObject(access_token_json,Map.class);
