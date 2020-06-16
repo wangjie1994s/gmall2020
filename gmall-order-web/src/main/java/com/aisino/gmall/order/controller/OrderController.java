@@ -53,8 +53,9 @@ public class OrderController {
         //根据检查结果提交订单，如果检查通过，允许提交订单； 如果检查失败，不允许提交订单
         // 1.检查交易码
        //todo 请求submitOrder方法参数为空问题需要排查
-        String success = orderService.checkTradeCode(memberId, tradeCode);
-       //String success = "success";
+        tradeCode = "gmall1592032836168202006165152036";
+        //String success = orderService.checkTradeCode(memberId, tradeCode);
+       String success = "success";
 
         if (success.equals("success")) {
             List<OmsOrderItem> omsOrderItems = new ArrayList<>();

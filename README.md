@@ -36,3 +36,5 @@ gmall-order-web                          订单服务的web层       :8087
 gmall-order-service                      订单服务的service层   :8074
 
 gmall-payment                            订单支付业务          :8075
+
+ActiveMQ                                 消息队列中间件        :8161

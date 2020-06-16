@@ -63,10 +63,17 @@ public class PaymentController {
             paymentService.updatePayment(paymentInfo);
         }
 
-        //支付成功后，引起的系统服务--》订单服务更新--》库存服务--》物流服务
         return "finish";
     }
 
+    /**
+     * 调用微信支付服务接口-目前暂不实现
+     * @param outTradeNo
+     * @param totalAmount
+     * @param request
+     * @param modelMap
+     * @return
+     */
     @RequestMapping("mx/submit")
     @LoginRequired(loginSuccess = true)
     public String mx(String outTradeNo, BigDecimal totalAmount, HttpServletRequest request, ModelMap modelMap){
