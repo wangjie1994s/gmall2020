@@ -15,7 +15,7 @@ public class OrderServiceMqListener {
     @Autowired
     OrderService orderService;
 
-    @JmsListener(destination = "PAYHMENT_SUCCESS_QUEUE", containerFactory = "jmsQueueListener")
+    @JmsListener(destination = "PAYMENT_SUCCESS_QUEUE", containerFactory = "jmsQueueListener")
     public void consumePaymentResult(MapMessage mapMessage) throws JMSException {
 
         String out_trade_no = mapMessage.getString("out_trade_no");

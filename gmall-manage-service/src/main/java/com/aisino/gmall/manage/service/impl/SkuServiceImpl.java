@@ -189,6 +189,7 @@ public class SkuServiceImpl implements SkuService{
             pmsSkuImageMapper.insertSelective(pmsSkuImage);
 
         }
+        //todo 发出商品的缓存同步消息
 
     }
 }

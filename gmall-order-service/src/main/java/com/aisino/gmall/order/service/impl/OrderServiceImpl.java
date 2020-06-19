@@ -10,7 +10,9 @@ import com.aisino.gmall.service.OrderService;
 import com.aisino.gmall.util.RedisUtil;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
 import org.apache.activemq.command.ActiveMQMapMessage;
+import org.apache.activemq.command.ActiveMQTextMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.Jedis;
 import tk.mybatis.mapper.entity.Example;
@@ -129,10 +131,22 @@ public class OrderServiceImpl implements OrderService {
 
             Queue order_pay_queue = session.createQueue("ORDER_PAY_QUEUE");
             MessageProducer producer = session.createProducer(order_pay_queue);
-            MapMessage mapMessage = new ActiveMQMapMessage();// hash结构
+            TextMessage textMessage = new ActiveMQTextMessage();//字符串结构
+            //MapMessage mapMessage = new ActiveMQMapMessage();// hash结构
+
+            //查询订单对象，转换成json字符串，存入ORDER_PAY_QUEUEde消息队列
+            OmsOrder omsOrderParam = new OmsOrder();
+            omsOrderParam.setOrderSn(omsOrder.getOrderSn());
+            OmsOrder omsOrderResponse = omsOrderMapper.selectOne(omsOrderParam);
+            OmsOrderItem omsOrderItemParam = new OmsOrderItem();
+            omsOrderItemParam.setOrderSn(omsOrderParam.getOrderSn());
+            List<OmsOrderItem> select = omsOrderItemMapper.select(omsOrderItemParam);
+            omsOrderResponse.setOmsOrderItems(select);
+            textMessage.setText(JSON.toJSONString(omsOrderResponse));
+
             //更新数据库中status状态为1
             omsOrderMapper.updateByExampleSelective(omsOrderUpdate, e);
-            producer.send(mapMessage);
+            producer.send(textMessage);
             session.commit();
         }catch (Exception ex){
             // 消息回滚
