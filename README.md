@@ -41,6 +41,7 @@ ActiveMQ                                 消息队列中间件        :8161
 
 gware-manage                             库存管理服务          :9001
 
+gmall-seckill                            秒杀服务             :8076
 
 项目未完成的功能点，仍需后期开发
 1.后台管理保存商品信息后需要发送队列消息，同步到缓存和elasticsearch中
